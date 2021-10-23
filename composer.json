@@ -1,0 +1,26 @@
+{
+  "name": "mirarus/db",
+  "description": "Mirarus Database Library",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ali Güçlü",
+      "email": "aliguclutr@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^7.3 || ^8.0",
+    "ext-pdo": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Mirarus\\DB\\": "src/"
+    }
+  },
+  "config": {
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "optimize-autoloader": true
+  }
+}
