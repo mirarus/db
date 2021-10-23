@@ -29,8 +29,8 @@ Install using composer:
   use Mirarus\DB\DB;
 
   /*
-  DB::dsn('mysql:host=localhost;dbname=testdb;charset=utf8', 'root', 'mysql');
   DB::dsn('mongodb://127.0.0.1', 'test');
+  DB::connect('mongodb');
   */
 
   DB::dsn('mysql:host=localhost;dbname=testdb;charset=utf8', 'root', 'mysql');
