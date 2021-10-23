@@ -1,4 +1,4 @@
-# Mirarus Database
+# Mirarus PHP Database Lib
 
 Mirarus Database Library
 
