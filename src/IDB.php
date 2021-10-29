@@ -8,7 +8,7 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.0
+ * @version 0.1
  */
 
 namespace Mirarus\DB;
@@ -21,6 +21,6 @@ interface IDB
 	public static function driver(string $driver): void;
 	public static function dsn(...$dsn): void;
 	public static function setTime(float $time, string $func): void;
-	public static function getTime(): array;
+	public static function getTime(string $func = null);
 	public function __debugInfo(): array;
 }

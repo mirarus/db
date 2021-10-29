@@ -8,7 +8,7 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.0
+ * @version 0.1
  */
 
 namespace Mirarus\DB;
@@ -74,6 +74,7 @@ final class DB implements IDB
 
 		$GLOBALS['_DB'] = self::$db;
 		$GLOBALS['_DB__' . self::$driver] = self::$db;
+		$GLOBALS['_DB__' . @mb_strtolower(self::$driver, "UTF-8")] = self::$db;
 
 		return self::$db;
 	}
@@ -104,11 +105,11 @@ final class DB implements IDB
 	}
 
 	/**
-	 * @return array
+	 * @param string|null $func
 	 */
-	public static function getTime(): array
+	public static function getTime(string $func = null)
 	{
-		return self::$_time;
+		return $func ? self::$_time[$func] : self::$_time;
 	}
 
 	/**
