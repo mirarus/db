@@ -8,12 +8,14 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.1
+ * @version 0.2
  */
 
 namespace Mirarus\DB;
 
-final class DB implements IDB
+use Mirarus\DB\Interfaces\DB as IDB;
+
+class DB implements IDB
 {
 
 	/**
@@ -29,16 +31,16 @@ final class DB implements IDB
 	private static $_time = [];
 
 	/**
-	 * Connection DSN
-	 * @var string
+	 * Connection Link
+	 * @var array
 	 */
-	private static $dsn;
+	protected static $connect = [];
 
 	/**
-	 * Selected Driver
+	 * Selected Driver Namespace Name
 	 * @var string
-	 */
-	private static $driver;
+	 */	
+	private static $dNamespace;
 
 	/**
 	 * Selected Driver Class Name
@@ -48,51 +50,33 @@ final class DB implements IDB
 
 	/**
 	 * Selected Driver Class
-	 * @var object
+	 * @var class
 	 */
 	private static $db;
 
 	/**
-	 * @param string|null $driver
+	 * @param object|string $driver
+	 * @param array|null		$dsn
 	 */
-	public function __construct(string $driver = null)
+	public function __construct($driver, ...$dsn)
 	{
-		$this->connect($driver);
-	}
+		self::$time = microtime(true);
 
-	/**
-	 * @param string|null $driver
-	 */
-	public static function connect(string $driver = null)
-	{
-		if ($driver) self::driver($driver);
-		
-		self::$time 	= microtime(true);
-		self::$driver = Driver::get();
-		self::$dClass	= (__NAMESPACE__ . '\\Driver\\' . self::$driver . '\\' . self::$driver);
-		self::$db 		= new self::$dClass(self::$dsn);
+		Connect::driver(is_object($driver) ? Connect::get('driver') : $driver);
+		Connect::dsn(is_object($driver) ? Connect::get('dsn') : ($dsn ?: null));
 
-		$GLOBALS['_DB'] = self::$db;
-		$GLOBALS['_DB__' . self::$driver] = self::$db;
-		$GLOBALS['_DB__' . @mb_strtolower(self::$driver, "UTF-8")] = self::$db;
+		self::$connect	 = Connect::get();
+		self::$dNamespace = (__NAMESPACE__ . '\\Driver\\' . self::$connect['driver']);
+		self::$dClass		 = (self::$dNamespace . '\\' . self::$connect['driver']);
+		self::$db				 = new self::$dClass();
+
+		$GLOBALS['_DB']	 = self::$db;
+		$GLOBALS['_DB__' . self::$connect['driver']] = self::$db;
+		$GLOBALS['_DB__' . @mb_strtolower(self::$connect['driver'], "UTF-8")] = self::$db;
+
+		self::setTime(microtime(true), __METHOD__);
 
 		return self::$db;
-	}
-
-	/**
-	 * @param string $driver
-	 */
-	public static function driver(string $driver): void
-	{
-		Driver::set($driver);
-	}
-
-	/**
-	 * @param toArray ...$dsn
-	 */
-	public static function dsn(...$dsn): void
-	{
-		self::$dsn = $dsn;
 	}
 
 	/**
@@ -107,9 +91,42 @@ final class DB implements IDB
 	/**
 	 * @param string|null $func
 	 */
-	public static function getTime(string $func = null)
+	public static function getTime(string $func = null, string $namespace = null)
 	{
+		if ($namespace) {
+
+			foreach (self::$_time as $key => $val) {
+				return strstr($key, $namespace) ? [$key => $val] : null;
+			}
+		}
+
 		return $func ? self::$_time[$func] : self::$_time;
+	}
+
+	/**
+	 * @param string $method
+	 * @param array  $args
+	 */
+	public function __call(string $method, array $args = [])
+	{
+		$function = call_user_func_array([self::$db, $method], $args);
+
+		self::setTime(microtime(true), __METHOD__);
+		
+		return $function;
+	}
+
+	/**
+	 * @param string $method
+	 * @param array  $args
+	 */
+	public static function __callStatic(string $method, array $args = [])
+	{
+		$function = call_user_func_array([self::$db, $method], $args);
+
+		self::setTime(microtime(true), __METHOD__);
+		
+		return $function;
 	}
 
 	/**
@@ -118,10 +135,10 @@ final class DB implements IDB
 	public function __debugInfo(): array
 	{
 		return [
-			'_driver' => Driver::get(),
-			'_dsn' => self::$dsn,
-			'_time' => self::$time,
-			'_driver_time' => self::getTime()
+			'_driver' => self::$connect['driver'],
+			'_dsn' => self::$connect['dsn'],
+			'_db' => self::$db,
+			'_time' => self::getTime()
 		];
 	}
 }

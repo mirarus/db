@@ -8,11 +8,12 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.0
+ * @version 0.1
  */
 
 namespace Mirarus\DB;
 
+use Mirarus\DB\Interfaces\Driver as IDriver;
 use Exception;
 
 class Driver implements IDriver
@@ -43,9 +44,9 @@ class Driver implements IDriver
 
 		self::$driver = $driver ? $driver : null;
 	}
-
+	
 	public static function get()
 	{
-		return self::$driver ? self::$driver : new Exception('Undefined SQL Driver');
+		return self::$driver;
 	}
 }

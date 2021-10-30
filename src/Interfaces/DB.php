@@ -1,26 +1,25 @@
 <?php
 
 /**
- * IDB
+ * DB
  *
  * Mirarus Database Libs
- * @package Mirarus\DB
+ * @package Mirarus\DB\Interfaces
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.1
+ * @version 0.0
  */
 
-namespace Mirarus\DB;
+namespace Mirarus\DB\Interfaces;
 
-interface IDB
+interface DB
 {
 
-	public function __construct(string $driver = null);
-	public static function connect(string $driver = null);
-	public static function driver(string $driver): void;
-	public static function dsn(...$dsn): void;
+	public function __construct($driver, ...$dsn);
 	public static function setTime(float $time, string $func): void;
 	public static function getTime(string $func = null);
+	public function __call(string $method, array $args = []);
+	public static function __callStatic(string $method, array $args = []);
 	public function __debugInfo(): array;
 }
