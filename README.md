@@ -24,29 +24,95 @@ Install using composer:
 ```bash
 <?php
 
-  require_once __DIR__ . '/vendor/autoload.php';
+require 'vendor/autoload.php';
 
-  use Mirarus\DB\DB;
+use Mirarus\DB\DB;
+use Mirarus\DB\Connect;
 
-  /*
-  DB::dsn('mongodb://127.0.0.1', 'test');
-  DB::connect('mongodb');
-  */
+/**
+ * Driver Usage List
+ *
+ * --/Mysql
+ * 
+ *  Set Driver: mysql
+ *  Set DSN: 'mysql:host=localhost;dbname=testdb;charset=utf8', 'root', 'mysql'
+ *  
+ *   [localhost, testdb, root, mysql] Changed
+ *
+ * 
+ * --/MongoDB
+ *  
+ *  Set Driver: mongodb
+ *  Set DSN: 'mongodb://localhost', 'test'
+ *  
+ *   [localhost, test] Changed
+ *
+ *
+ * /****\
+ *
+ *  Global Values
+ *  	_DB
+ *  	_DB__$driverName
+ *  	
+ */
 
-  DB::dsn('mysql:host=localhost;dbname=testdb;charset=utf8', 'root', 'mysql');
-  DB::connect('mysql');
+/**
+ * Connection Static Usage
+ */
+Connect::dsn('mysql:host=localhost;dbname=testdb;charset=utf8', 'root', 'mysql');
+Connect::driver('mysql');
 
-  var_dump($_DB);
-  var_dump($_DB__Mysql);
-  var_dump($_DB__MongoDB);
+$db = new DB(new Connect);
 
-  $result = $_DB
-  ->insert('users', [
-    'name' => 'Ali', 
-    'surname' => 'Güçlü'
-  ]);
+/**
+ * Connection Return Usage
+ */
+$connect = new Connect();
+$connect->driver('mysql');
+$connect->dsn('mysql:host=localhost;dbname=testdb;charset=utf8', 'root', 'mysql');
 
-  var_dump($result);
+$connect = new Connect('mysql', 'mysql:host=localhost;dbname=testdb;charset=utf8', 'root', 'mysql');
+
+$db = new DB($connect);
+
+/**
+ * Connection Mini Usage
+ */
+
+$db = new DB('mysql', 'mysql:host=localhost;dbname=testdb;charset=utf8', 'root', 'mysql');
+
+/*
+$result = $db
+->insert('users')
+->set([
+  'name' => 'Ali', 
+  'surname' => 'Güçlü'
+]);
+
+$result = $db
+->from('users')
+->update([
+	'name' => 'Ali X', 
+	'surname' => 'Güçlü X'
+], ['_id' => 14]);
+*/
+
+/*$result = $db
+->update('users')
+->where('_id', 14)
+->set([
+  'name' => 'Ali', 
+  'surname' => 'Güçlüxxddds'
+]);
+*/
+
+$result = $db->from('users')->all();
+
+
+var_dump($result);
+
+var_dump($db);
+
 ?>
 ```
 
