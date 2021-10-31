@@ -62,10 +62,10 @@ $db = new DB('mysql', 'mysql:host=localhost;dbname=testdb;charset=utf8', 'root',
 
 /*
 $result = $db
-->from('users')
-->insert([
-	'name' => 'Ali', 
-	'surname' => 'Güçlü'
+->insert('users')
+->set([
+  'name' => 'Ali', 
+  'surname' => 'Güçlü'
 ]);
 
 $result = $db
@@ -77,6 +77,18 @@ $result = $db
 */
 
 $result = $db->from('users')->all();
+
+
+/*$result = $db
+->update('users')
+->where('_id', 14)
+->set([
+  'name' => 'Ali', 
+  'surname' => 'Güçlüxxddds'
+]);
+*/
+$result = $db->from('users')->all();
+
 
 var_dump($result);
 
