@@ -8,7 +8,7 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.1
+ * @version 0.2
  */
 
 namespace Mirarus\DB;
@@ -43,8 +43,13 @@ class Connect implements IConnect
 	 */
 	public static function driver(string $driver): void
 	{
-		Driver::set($driver);
-		self::$link['driver'] = Driver::get();
+		$driver = @trim($driver);
+		$driver = @mb_strtolower($driver, "UTF-8");
+		$driver = @Driver::get()[$driver];
+
+		if (!$driver) throw new Exception('Undefined SQL Driver');
+
+		self::$link['driver'] = $driver;
 	}
 
 	/**
@@ -54,17 +59,7 @@ class Connect implements IConnect
 	{
 		self::$link['dsn'] = is_array($dsn[0]) ? $dsn[0] : $dsn;
 	}
-
-	/**
-	 * @param string $driver
-	 * @param array  $dsn
-	 */
-	public static function set(string $driver, ...$dsn): void
-	{
-		self::driver($driver);
-		self::dsn($dsn);
-	}
-
+	
 	/**
 	 * @param string|null $par
 	 */

@@ -8,7 +8,7 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.0
+ * @version 0.1
  */
 
 namespace Mirarus\DB\Interfaces;
@@ -19,7 +19,6 @@ interface Connect
   public function __construct();
 	public static function driver(string $driver): void;
   public static function dsn(...$dsn): void;
-  public static function set(string $driver, ...$dsn): void;
   public static function get(string $par = null);
   public function __debugInfo(): array;
 }
