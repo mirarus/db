@@ -8,12 +8,15 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.2
+ * @version 0.3
  */
 
 namespace Mirarus\DB;
 
 use Mirarus\DB\Interfaces\DB as IDB;
+use Mirarus\DB\Interfaces\Connect as IConnect;
+
+@set_time_limit(0);
 
 class DB implements IDB
 {
@@ -55,22 +58,17 @@ class DB implements IDB
 	private static $db;
 
 	/**
-	 * @param object|string $driver
-	 * @param array|null		$dsn
+	 * @param IConnect $connector
 	 */
-	public function __construct($driver, ...$dsn)
+	public function __construct(IConnect $connector)
 	{
-		self::$time = microtime(true);
-
-		Connect::driver(is_object($driver) ? Connect::get('driver') : $driver);
-		Connect::dsn(is_object($driver) ? Connect::get('dsn') : ($dsn ?: null));
-
-		self::$connect	 = Connect::get();
+		self::$time				= microtime(true);
+		self::$connect		= $connector->get();
 		self::$dNamespace = (__NAMESPACE__ . '\\Driver\\' . self::$connect['driver']);
-		self::$dClass		 = (self::$dNamespace . '\\' . self::$connect['driver']);
-		self::$db				 = new self::$dClass();
+		self::$dClass			= (self::$dNamespace . '\\' . self::$connect['driver']);
+		self::$db					= new self::$dClass();
 
-		$GLOBALS['_DB']	 = self::$db;
+		$GLOBALS['_DB']		= self::$db;
 		$GLOBALS['_DB__' . self::$connect['driver']] = self::$db;
 		$GLOBALS['_DB__' . @mb_strtolower(self::$connect['driver'], "UTF-8")] = self::$db;
 
@@ -90,13 +88,13 @@ class DB implements IDB
 
 	/**
 	 * @param string|null $func
+	 * @param string|null $ns
 	 */
-	public static function getTime(string $func = null, string $namespace = null)
+	public static function getTime(string $func = null, string $ns = null)
 	{
-		if ($namespace) {
-
+		if ($ns) {
 			foreach (self::$_time as $key => $val) {
-				return strstr($key, $namespace) ? [$key => $val] : null;
+				return strstr($key, $ns) ? [$key => $val] : null;
 			}
 		}
 

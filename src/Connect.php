@@ -8,12 +8,15 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.0
+ * @version 0.1
  */
 
 namespace Mirarus\DB;
 
 use Mirarus\DB\Interfaces\Connect as IConnect;
+use Exception;
+
+@set_time_limit(0);
 
 class Connect implements IConnect
 {
@@ -67,6 +70,9 @@ class Connect implements IConnect
 	 */
 	public static function get(string $par = null)
 	{
+		if (!self::$link['driver']) throw new Exception('Undefined SQL Driver');
+		if (!self::$link['dsn']) throw new Exception('Undefined SQL DSN');
+
 		return $par ? self::$link[$par] : self::$link;
 	}
 

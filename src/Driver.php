@@ -8,7 +8,7 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.1
+ * @version 0.2
  */
 
 namespace Mirarus\DB;
@@ -24,7 +24,8 @@ class Driver implements IDriver
 	 */
 	private static $drivers = [
 		'mysql' => 'Mysql',
-		'mongodb' => 'MongoDB'
+		'mongodb' => 'MongoDB',
+		'basicdb-mysql' => 'BasicDB_Mysql'
 	];
 	
 	/**
@@ -37,6 +38,7 @@ class Driver implements IDriver
 	 */
 	public static function set(string $driver): void
 	{
+		$driver = @trim($driver);
 		$driver = @mb_strtolower($driver, "UTF-8");
 		$driver = @self::$drivers[$driver];
 
