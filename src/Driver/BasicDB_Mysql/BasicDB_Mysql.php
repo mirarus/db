@@ -8,17 +8,18 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.0
+ * @version 0.1
  */
 
 namespace Mirarus\DB\Driver\BasicDB_Mysql;
 
 use Mirarus\DB\DB;
+use Mirarus\DB\Driver;
+use Mirarus\DB\_Exception;
 use Mirarus\DB\Interfaces\Driver\BasicDB_Mysql\BasicDB_Mysql as IBasicDB_Mysql;
 use PDO;
 use PDOException;
 use Closure;
-use Exception;
 
 class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 {
@@ -590,7 +591,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	{
 		$this->get_where('where');
 		$this->get_where('having');
-		$result = $this->errorTemplate($this->sql);
+		$result = $this->showError($this->sql);
 		DB::setTime(microtime(true), __METHOD__);
 		return $result;
 	}
@@ -685,33 +686,6 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	}
 
 	/**
-	 * @param string $name
-	 * @param array  $args
-	 */
-	public function __call(string $name, array $args)
-	{
-		$this->error = ($name . ' Method Not Found.');
-		$this->errorTemplate();
-		DB::setTime(microtime(true), __METHOD__);
-	}
-
-	/**
-	 * @param PDOException $error
-	 */
-	private function showError(PDOException $error)
-	{
-		$this->error = $error->getMessage();
-		$this->errorTemplate();
-		DB::setTime(microtime(true), __METHOD__);
-	}
-
-	public function errorTemplate()
-	{
-		DB::setTime(microtime(true), __METHOD__);
-		throw new Exception(__CLASS__ . ' Error! | ' . $this->error);
-	}
-
-	/**
 	 * @param string $tableName
 	 */
 	public function truncate(string $tableName)
@@ -748,5 +722,29 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 		$result = $this->conn->query("ALTER TABLE `{$tableName}` AUTO_INCREMENT = {$ai}")->fetch();
 		DB::setTime(microtime(true), __METHOD__);
 		return $result;
+	}
+
+	protected function showError($error)
+	{
+		if ($error instanceof PDOException) {
+			$this->error = $error->getMessage();
+		} else {
+			$this->error = $error;
+		}
+
+		if (!$this->error) return;
+
+		DB::setTime(microtime(true), __METHOD__);
+		throw new _Exception(Driver::getText(), $this->error);
+	}
+
+	/**
+	 * @param string $name
+	 * @param array  $args
+	 */
+	public function __call(string $method, array $args)
+	{
+		$this->showError(($method . ' Method Not Found.'));
+		DB::setTime(microtime(true), __METHOD__);
 	}
 }

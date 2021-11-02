@@ -62,9 +62,8 @@ interface BasicDB_Mysql
   public function like($column, $value, string $inner = 'all');
   public function notLike($column, $value, string $inner = 'all');
   public function soundex($column, $value);
-  public function __call(string $name, array $args);
-  public function errorTemplate();
   public function truncate(string $tableName);
   public function truncateAll(array $dbs = []);
   public function setAutoIncrement(string $tableName, int $ai = 1);
+  public function __call(string $name, array $args);
 }

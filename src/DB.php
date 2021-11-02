@@ -108,9 +108,7 @@ class DB implements IDB
 	public function __call(string $method, array $args = [])
 	{
 		$function = call_user_func_array([self::$db, $method], $args);
-
 		self::setTime(microtime(true), __METHOD__);
-		
 		return $function;
 	}
 
@@ -121,9 +119,7 @@ class DB implements IDB
 	public static function __callStatic(string $method, array $args = [])
 	{
 		$function = call_user_func_array([self::$db, $method], $args);
-
 		self::setTime(microtime(true), __METHOD__);
-		
 		return $function;
 	}
 

@@ -8,16 +8,17 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.3
+ * @version 0.4
  */
 
 namespace Mirarus\DB\Driver\Mysql;
 
 use Mirarus\DB\DB;
+use Mirarus\DB\Driver;
+use Mirarus\DB\_Exception;
 use Mirarus\DB\Interfaces\Driver\Mysql\Mysql as IMysql;
 use PDO;
 use PDOException;
-use Exception;
 
 class Mysql extends Connect implements IMysql
 {
@@ -309,6 +310,6 @@ class Mysql extends Connect implements IMysql
 	private function showError(PDOException $error)
 	{
 		$this->error = $error->getMessage();
-		throw new Exception(__CLASS__ . ' Error! | ' . $error->getMessage());
+		throw new _Exception(Driver::getText(), $error->getMessage());
 	}
 }
