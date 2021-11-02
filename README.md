@@ -75,12 +75,6 @@ $connect = new Connect('mysql', 'mysql:host=localhost;dbname=testdb;charset=utf8
 
 $db = new DB($connect);
 
-/**
- * Connection Mini Usage
- */
-
-$db = new DB('mysql', 'mysql:host=localhost;dbname=testdb;charset=utf8', 'root', 'mysql');
-
 /*
 $result = $db
 ->insert('users')
