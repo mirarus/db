@@ -83,6 +83,7 @@ class DB implements IDB
 	 */
 	public static function setTime(float $time, string $func): void
 	{
+		# $func = str_replace((__NAMESPACE__ . '\\'), null, $func);
 		self::$_time[$func] = ($time - self::$time);
 	}
 
@@ -98,6 +99,7 @@ class DB implements IDB
 			}
 		}
 
+		# $func = $func ? ( __NAMESPACE__ . '\\') . $func : null;
 		return $func ? self::$_time[$func] : self::$_time;
 	}
 
