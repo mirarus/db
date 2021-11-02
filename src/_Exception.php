@@ -8,7 +8,7 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.0
+ * @version 0.1
  */
 
 namespace Mirarus\DB;
@@ -22,15 +22,16 @@ class _Exception extends Exception
 	protected $message;
 
 	/**
-	 * @param string $class
-	 * @param string $message
+	 * @param string      $class
+	 * @param string      $message
+	 * @param int|integer $code
 	 */
-	public function __construct(string $class, string $message)
+	public function __construct(string $class, string $message, int $code = 0)
 	{
 		$this->class = $class;
 		$this->message = $message;
 
-    parent::__construct($message);
+    parent::__construct($message, $code);
 	}
 
 	/**

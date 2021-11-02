@@ -8,7 +8,7 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.1
+ * @version 0.2
  */
 
 namespace Mirarus\DB\Driver\BasicDB_Mysql;
@@ -42,6 +42,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	$totalRecord,
 	$paginationLimit,
 	$html;
+	public $queries = [];
 	public $pageCount;
 	public $debug = false;
 	public $paginationItem = '<li class="[active]"><a href="[url]">[text]</a></li>';
@@ -235,6 +236,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 		try {
 			$query = $this->generateQuery();
 			$result = $query->fetchAll(PDO::FETCH_ASSOC);
+			$this->queries[$this->sql] = $result;
 			DB::setTime(microtime(true), __METHOD__);
 			return $result;
 		} catch (PDOException $e) {
@@ -247,6 +249,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 		try {
 			$query = $this->generateQuery();
 			$result = $query->fetch(PDO::FETCH_ASSOC);
+			$this->queries[$this->sql] = $result;
 			DB::setTime(microtime(true), __METHOD__);
 			return $result;
 		} catch (PDOException $e) {
@@ -260,6 +263,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 			$query = $this->generateQuery();
 			$query->fetch();
 			$result = $query->rowCount();
+			$this->queries[$this->sql] = $result;
 			DB::setTime(microtime(true), __METHOD__);
 			return $result;
 		} catch (PDOException $e) {
@@ -272,6 +276,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 		try {
 			$query = $this->generateQuery();
 			$result = $query->fetchColumn();
+			$this->queries[$this->sql] = $result;
 			DB::setTime(microtime(true), __METHOD__);
 			return $result;
 		} catch (PDOException $e) {
@@ -310,9 +315,10 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 			$this->sqlq = null;
 		}
 		$this->type = '';
-		$query = $this->conn->query($this->sql);
+		$result = $this->conn->query($this->sql);
+		$this->queries[$this->sql] = $result;
 		DB::setTime(microtime(true), __METHOD__);
-		return $query;
+		return $result;
 	}
 
 	/**
@@ -447,8 +453,8 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 			}
 			$this->get_where('where');
 			$this->get_where('having');
-			$query = $this->conn->prepare($this->sql);
-			$result = $query->execute($executeValue);
+			$result = $this->conn->prepare($this->sql)->execute($executeValue);
+			$this->queries[$this->sql] = $result;
 			DB::setTime(microtime(true), __METHOD__);
 			if ($result) {
 				if (strstr($this->sql, 'INSERT INTO ')) {
@@ -511,6 +517,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 			$this->get_where('where');
 			$this->get_where('having');
 			$result = $this->conn->exec($this->sql);
+			$this->queries[$this->sql] = $result;
 			DB::setTime(microtime(true), __METHOD__);
 			return $result;
 		} catch (PDOException $e) {
@@ -539,6 +546,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 			$this->limit = null;
 		}
 		$result = $this->conn->query($this->sql)->fetch(PDO::FETCH_ASSOC);
+		$this->queries[$this->sql] = $result;
 		DB::setTime(microtime(true), __METHOD__);
 		return $result['total'];
 	}
@@ -691,6 +699,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	public function truncate(string $tableName)
 	{
 		$result = $this->conn->query('TRUNCATE TABLE ' . $tableName);
+		self::$queries[] = $result;
 		DB::setTime(microtime(true), __METHOD__);
 		return $result;
 	}
@@ -720,6 +729,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	public function setAutoIncrement(string $tableName, int $ai = 1)
 	{
 		$result = $this->conn->query("ALTER TABLE `{$tableName}` AUTO_INCREMENT = {$ai}")->fetch();
+		$this->queries[] = $result;
 		DB::setTime(microtime(true), __METHOD__);
 		return $result;
 	}

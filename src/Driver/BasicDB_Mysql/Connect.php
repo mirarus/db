@@ -8,7 +8,7 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.1
+ * @version 0.2
  */
 
 namespace Mirarus\DB\Driver\BasicDB_Mysql;
@@ -24,6 +24,7 @@ class Connect extends _Connect implements IConnect
 
 	protected $conn;
 	protected $error;
+	protected $result;
 
 	public function __construct()
 	{
