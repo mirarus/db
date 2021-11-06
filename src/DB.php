@@ -8,7 +8,7 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.4
+ * @version 0.5
  */
 
 namespace Mirarus\DB;
@@ -55,7 +55,7 @@ class DB implements IDB
 	 * Selected Driver Class
 	 * @var class
 	 */
-	private static $db;
+	public static $db;
 
 	/**
 	 * @param IConnect $connector
