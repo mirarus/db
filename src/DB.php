@@ -8,7 +8,7 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.3
+ * @version 0.4
  */
 
 namespace Mirarus\DB;
@@ -68,9 +68,9 @@ class DB implements IDB
 		self::$dClass			= (self::$dNamespace . '\\' . self::$connect['driver']);
 		self::$db					= new self::$dClass();
 
-		$GLOBALS['_DB']		= self::$db;
-		$GLOBALS['_DB__' . self::$connect['driver']] = self::$db;
-		$GLOBALS['_DB__' . @mb_strtolower(self::$connect['driver'], "UTF-8")] = self::$db;
+		self::setGlobal('_DB', self::$db);
+		self::setGlobal(('_DB__' . self::$connect['driver']), self::$db);
+		self::setGlobal(('_DB__' . @mb_strtolower(self::$connect['driver'], "UTF-8")), self::$db);
 
 		self::setTime(microtime(true), __METHOD__);
 
@@ -101,6 +101,15 @@ class DB implements IDB
 
 		# $func = $func ? ( __NAMESPACE__ . '\\') . $func : null;
 		return $func ? self::$_time[$func] : self::$_time;
+	}
+
+	/**
+	 * @param string $key
+	 * @param mixed	 $val
+	 */	
+	private static function setGlobal(string $key, $val): void
+	{
+		@$GLOBALS[$key] = $val;
 	}
 
 	/**
