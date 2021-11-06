@@ -94,3 +94,6 @@ var_dump($result);
 
 
 var_dump($db);
+
+
+var_dump($GLOBALS);
