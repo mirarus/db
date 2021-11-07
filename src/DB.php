@@ -8,7 +8,7 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.5
+ * @version 0.6
  */
 
 namespace Mirarus\DB;
@@ -74,6 +74,11 @@ class DB implements IDB
 
 		self::setTime(microtime(true), __METHOD__);
 
+		return self::$db;
+	}
+
+	public static function DB()
+	{
 		return self::$db;
 	}
 
