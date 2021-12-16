@@ -21,12 +21,15 @@ use MongoDB\Driver\BulkWrite;
 class MongoDB extends Connect implements IMongoDB
 {
 
+	/**
+	 * @var string
+	 */
 	private static $tableName;
 
 	/**
 	 * @param string $tableName
 	 */
-	public function from(string $tableName)
+	public function from(string $tableName) // @phpstan-ignore-line
 	{
 		$this->tableName = $tableName;
 		return $this;
@@ -36,7 +39,7 @@ class MongoDB extends Connect implements IMongoDB
 	 * @param  array $columns
 	 * @return array
 	 */
-	public function all(array $columns = []): array
+	public function all(array $columns = []): array // @phpstan-ignore-line
 	{
 		$query = new Query([]);
 		$result = $this->conn->executeQuery($this->dbName . '.' . $this->tableName, $query)->toArray();
@@ -52,7 +55,7 @@ class MongoDB extends Connect implements IMongoDB
 	 * @param  array  $data
 	 * @return boolean
 	 */
-	public function insert(array $data = []): bool
+	public function insert(array $data = []): bool // @phpstan-ignore-line
 	{
 		$writter = new BulkWrite();
 		$writter->insert($data);
@@ -69,7 +72,7 @@ class MongoDB extends Connect implements IMongoDB
 	 * @param  array  $wD
 	 * @return boolean
 	 */
-	public function update(array $sD = [], array $wD = []): bool
+	public function update(array $sD = [], array $wD = []): bool // @phpstan-ignore-line
 	{
 		$writter = new BulkWrite();
 		$writter->update($wD, ['$set' => $sD]);

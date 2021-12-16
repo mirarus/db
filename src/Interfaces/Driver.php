@@ -16,5 +16,5 @@ namespace Mirarus\DB\Interfaces;
 interface Driver
 {
 
-	public static function get(): array;
+	public static function get(): array; // @phpstan-ignore-line
 }

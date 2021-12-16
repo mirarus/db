@@ -19,7 +19,7 @@ class Driver
 	/**
 	 * @var array
 	 */
-	private static $drivers = [
+	private static $drivers = [ // @phpstan-ignore-line
 		'mysql' => 'Mysql',
 		'mongodb' => 'MongoDB',
 		'basicdb-mysql' => 'BasicDB_Mysql'
@@ -33,7 +33,7 @@ class Driver
 	/**
 	 * @return array
 	 */
-	public static function drivers(): array
+	public static function drivers(): array // @phpstan-ignore-line
 	{
 		return (array) self::$drivers;
 	}
@@ -41,7 +41,7 @@ class Driver
 	/**
 	 * @param string $driver
 	 */
-	public static function set(string $driver)
+	public static function set(string $driver): void
 	{
 		if (self::$drivers[$driver]) self::$driver = $driver;
 	}

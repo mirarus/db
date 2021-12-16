@@ -18,7 +18,7 @@ interface Connect
 
   public function __construct();
 	public static function driver(string $driver): void;
-  public static function dsn(...$dsn): void;
-  public static function get(string $par = null);
-  public function __debugInfo(): array;
+  public static function dsn(...$dsn): void; // @phpstan-ignore-line
+  public static function get(string $par = null); // @phpstan-ignore-line
+  public function __debugInfo(): array; // @phpstan-ignore-line
 }

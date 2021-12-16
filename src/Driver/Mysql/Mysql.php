@@ -23,29 +23,31 @@ use PDOException;
 class Mysql extends Connect implements IMysql
 {
 
-	private static 
-	$sql,
-	$tableName,
-	$type,
-	$unionSql,
-	$where,
-	$having,
-	$grouped,
-	$group_id,
-	$join,
-	$orderBy,
-	$groupBy,
-	$limit,
-	$sqlq,
-	$page,
-	$totalRecord,
-	$paginationLimit,
-	$html;
+	private static
+	$type, // @phpstan-ignore-line
+	$sql, // @phpstan-ignore-line
+	$unionSql, // @phpstan-ignore-line
+	$tableName, // @phpstan-ignore-line
+	$where, // @phpstan-ignore-line
+	$having, // @phpstan-ignore-line
+	$grouped, // @phpstan-ignore-line
+	$group_id, // @phpstan-ignore-line
+	$join, // @phpstan-ignore-line
+	$orderBy, // @phpstan-ignore-line
+	$groupBy, // @phpstan-ignore-line
+	$limit, // @phpstan-ignore-line
+	$sqlq, // @phpstan-ignore-line
+	$page, // @phpstan-ignore-line
+	$totalRecord, // @phpstan-ignore-line
+	$paginationLimit, // @phpstan-ignore-line
+	$html; // @phpstan-ignore-line
+	public static $queries = []; // @phpstan-ignore-line
+	public static $reference = ['NOW()']; // @phpstan-ignore-line
 
 	/**
 	 * @param string $tableName
 	 */
-	public function from(string $tableName)
+	public function from(string $tableName) // @phpstan-ignore-line
 	{
 		$this->sql = 'SELECT * FROM ' . $tableName;
 		$this->tableName = $tableName;
@@ -56,7 +58,7 @@ class Mysql extends Connect implements IMysql
 	/**
 	 * @param string $tableName
 	 */
-	public function countFrom(string $tableName)
+	public function countFrom(string $tableName) // @phpstan-ignore-line
 	{
 		$this->sql = 'SELECT COUNT(*) FROM ' . $tableName;
 		$this->tableName = $tableName;
@@ -67,7 +69,7 @@ class Mysql extends Connect implements IMysql
 	/**
 	 * @param string $columns
 	 */
-	public function select(string $columns)
+	public function select(string $columns) // @phpstan-ignore-line
 	{
 		$this->sql = str_replace(' * ', ' ' . $columns . ' ', $this->sql);
 		DB::setTime(microtime(true), __METHOD__);
@@ -80,7 +82,7 @@ class Mysql extends Connect implements IMysql
 	 * @param string $mark
 	 * @param string $logical
 	 */
-	public function where(string $column, string $value = '', string $mark = '=', string $logical = '&&')
+	public function where(string $column, string $value = '', string $mark = '=', string $logical = '&&') // @phpstan-ignore-line
 	{
 		$this->where[] = [
 			'column' => $column,
@@ -97,7 +99,7 @@ class Mysql extends Connect implements IMysql
 	/**
 	 * @param string $tableName
 	 */
-	public function insert(string $tableName)
+	public function insert(string $tableName) // @phpstan-ignore-line
 	{
 		$this->sql = 'INSERT INTO ' . $tableName;
 		DB::setTime(microtime(true), __METHOD__);
@@ -107,7 +109,7 @@ class Mysql extends Connect implements IMysql
 	/**
 	 * @param string $tableName
 	 */
-	public function update(string $tableName)
+	public function update(string $tableName) // @phpstan-ignore-line
 	{
 		$this->sql = 'UPDATE ' . $tableName;
 		DB::setTime(microtime(true), __METHOD__);
@@ -117,14 +119,14 @@ class Mysql extends Connect implements IMysql
 	/**
 	 * @param string $tableName
 	 */
-	public function delete(string $tableName)
+	public function delete(string $tableName) // @phpstan-ignore-line
 	{
 		$this->sql = 'DELETE FROM ' . $tableName;
 		DB::setTime(microtime(true), __METHOD__);
 		return $this;
 	}
 
-	public function set($data, $value = null)
+	public function set($data, $value = null) // @phpstan-ignore-line
 	{
 		try {
 
@@ -164,7 +166,7 @@ class Mysql extends Connect implements IMysql
 		}
 	}
 
-	public function done()
+	public function done() // @phpstan-ignore-line
 	{
 		try {
 			$this->getWhere('where');
@@ -177,7 +179,7 @@ class Mysql extends Connect implements IMysql
 		}
 	}
 
-	public function all()
+	public function all() // @phpstan-ignore-line
 	{
 		try {
 			$result = $this->genQuery()->fetchAll(PDO::FETCH_ASSOC);
@@ -188,7 +190,7 @@ class Mysql extends Connect implements IMysql
 		}
 	}
 
-	public function first()
+	public function first() // @phpstan-ignore-line
 	{
 		try {
 			$result = $this->genQuery()->fetch(PDO::FETCH_ASSOC);
@@ -199,7 +201,7 @@ class Mysql extends Connect implements IMysql
 		}
 	}
 
-	private function genQuery()
+	private function genQuery() // @phpstan-ignore-line
 	{
 		try {
 			if ($this->join) {
@@ -296,7 +298,7 @@ class Mysql extends Connect implements IMysql
 			$whereClause = rtrim($whereClause, '||');
 			$whereClause = rtrim($whereClause, '&&');
 			$whereClause = preg_replace('/\(\s+(\|\||&&)/', '(', $whereClause);
-			$whereClause = preg_replace('/(\|\||&&)\s+\)/', ')', $whereClause);
+			$whereClause = preg_replace('/(\|\||&&)\s+\)/', ')', (string) $whereClause);
 			$this->sql .= $whereClause;
 			$this->unionSql .= $whereClause;
 			$this->{$conditionType} = null;
@@ -305,9 +307,10 @@ class Mysql extends Connect implements IMysql
 	}
 
 	/**
-	 * @param PDOException $error
+	 * @param  PDOException $error
+	 * @return _Exception
 	 */
-	private function showError(PDOException $error)
+	private function showError(PDOException $error): _Exception
 	{
 		$this->error = $error->getMessage();
 		throw new _Exception(Driver::getText(), $error->getMessage());

@@ -16,15 +16,15 @@ namespace Mirarus\DB\Interfaces\Driver\Mysql;
 interface Mysql
 {
 
-  public function from(string $tableName);
-  public function countFrom(string $tableName);
-  public function select(string $columns);
-  public function where(string $column, string $value = '', string $mark = '=', string $logical = '&&');
-  public function insert(string $tableName);
-  public function update(string $tableName);
-  public function delete(string $tableName);
-  public function set($data, $value = null);
-  public function done();
-  public function all();
-  public function first();
+  public function from(string $tableName); // @phpstan-ignore-line
+  public function countFrom(string $tableName); // @phpstan-ignore-line
+  public function select(string $columns); // @phpstan-ignore-line
+  public function where(string $column, string $value = '', string $mark = '=', string $logical = '&&'); // @phpstan-ignore-line
+  public function insert(string $tableName); // @phpstan-ignore-line
+  public function update(string $tableName); // @phpstan-ignore-line
+  public function delete(string $tableName); // @phpstan-ignore-line
+  public function set($data, $value = null); // @phpstan-ignore-line
+  public function done(); // @phpstan-ignore-line
+  public function all(); // @phpstan-ignore-line
+  public function first(); // @phpstan-ignore-line
 }

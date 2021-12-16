@@ -8,7 +8,7 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.2
+ * @version 0.3
  */
 
 namespace Mirarus\DB\Driver\BasicDB_Mysql;
@@ -25,33 +25,33 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 {
 
 	private
-	$type,
-	$sql,
-	$unionSql,
-	$tableName,
-	$where,
-	$having,
-	$grouped,
-	$group_id,
-	$join,
-	$orderBy,
-	$groupBy,
-	$limit,
-	$sqlq,
-	$page,
-	$totalRecord,
-	$paginationLimit,
-	$html;
-	public $queries = [];
-	public $pageCount;
-	public $debug = false;
-	public $paginationItem = '<li class="[active]"><a href="[url]">[text]</a></li>';
-	public $reference = ['NOW()'];
+	$type, // @phpstan-ignore-line
+	$sql, // @phpstan-ignore-line
+	$unionSql, // @phpstan-ignore-line
+	$tableName, // @phpstan-ignore-line
+	$where, // @phpstan-ignore-line
+	$having, // @phpstan-ignore-line
+	$grouped, // @phpstan-ignore-line
+	$group_id, // @phpstan-ignore-line
+	$join, // @phpstan-ignore-line
+	$orderBy, // @phpstan-ignore-line
+	$groupBy, // @phpstan-ignore-line
+	$limit, // @phpstan-ignore-line
+	$sqlq, // @phpstan-ignore-line
+	$page, // @phpstan-ignore-line
+	$totalRecord, // @phpstan-ignore-line
+	$paginationLimit, // @phpstan-ignore-line
+	$html; // @phpstan-ignore-line
+	public $queries = []; // @phpstan-ignore-line
+	public $pageCount; // @phpstan-ignore-line
+	public $debug = false; // @phpstan-ignore-line
+	public $paginationItem = '<li class="[active]"><a href="[url]">[text]</a></li>'; // @phpstan-ignore-line
+	public $reference = ['NOW()']; // @phpstan-ignore-line
 
 	/**
 	 * @param string $tableName
 	 */
-	public function from(string $tableName)
+	public function from(string $tableName) // @phpstan-ignore-line
 	{
 		$this->sql = 'SELECT * FROM ' . $tableName;
 		$this->tableName = $tableName;
@@ -62,7 +62,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	/**
 	 * @param string $tableName
 	 */
-	public function Countfrom(string $tableName)
+	public function Countfrom(string $tableName) // @phpstan-ignore-line
 	{
 		$this->sql = 'SELECT  COUNT(*) FROM ' . $tableName;
 		$this->tableName = $tableName;
@@ -73,14 +73,14 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	/**
 	 * @param string $columns
 	 */
-	public function select(string $columns)
+	public function select(string $columns) // @phpstan-ignore-line
 	{
 		$this->sql = str_replace(' * ', ' ' . $columns . ' ', $this->sql);
 		DB::setTime(microtime(true), __METHOD__);
 		return $this;
 	}
 
-	public function union()
+	public function union() // @phpstan-ignore-line
 	{
 		$this->type = 'union';
 		$this->unionSql = $this->sql;
@@ -91,7 +91,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	/**
 	 * @param Closure $fn
 	 */
-	public function group(Closure $fn)
+	public function group(Closure $fn) // @phpstan-ignore-line
 	{
 		static $group_id = 0;
 		$this->grouped = true;
@@ -107,7 +107,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	 * @param string $mark
 	 * @param string $logical
 	 */
-	public function where($column, string $value = '', string $mark = '=', string $logical = '&&')
+	public function where($column, string $value = '', string $mark = '=', string $logical = '&&') // @phpstan-ignore-line
 	{
 		$this->where[] = [
 			'column' => $column,
@@ -126,7 +126,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	 * @param string $mark
 	 * @param string $logical
 	 */
-	public function having($column, string $value = '', string $mark = '=', string $logical = '&&')
+	public function having($column, string $value = '', string $mark = '=', string $logical = '&&') // @phpstan-ignore-line
 	{
 		$this->having[] = [
 			'column' => $column,
@@ -144,7 +144,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	 * @param string $value
 	 * @param string $mark
 	 */
-	public function or_where($column, string $value, string $mark = '=')
+	public function or_where($column, string $value, string $mark = '=') // @phpstan-ignore-line
 	{
 		$this->where($column, $value, $mark, '||');
 		DB::setTime(microtime(true), __METHOD__);
@@ -155,7 +155,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	 * @param string $value
 	 * @param string $mark
 	 */
-	public function or_having($column, string $value, string $mark = '=')
+	public function or_having($column, string $value, string $mark = '=') // @phpstan-ignore-line
 	{
 		$this->having($column, $value, $mark, '||');
 		DB::setTime(microtime(true), __METHOD__);
@@ -166,7 +166,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	 * @param string $targetTable
 	 * @param string $joinType
 	 */
-	public function join(string $targetTable, $joinSql, string $joinType = 'inner')
+	public function join(string $targetTable, $joinSql, string $joinType = 'inner') // @phpstan-ignore-line
 	{
 		$this->join[] = ' ' . strtoupper($joinType) . ' JOIN ' . $targetTable . ' ON ' . sprintf($joinSql, $targetTable, $this->tableName);
 		DB::setTime(microtime(true), __METHOD__);
@@ -176,7 +176,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	/**
 	 * @param string $targetTable
 	 */
-	public function leftJoin(string $targetTable, $joinSql)
+	public function leftJoin(string $targetTable, $joinSql) // @phpstan-ignore-line
 	{
 		$this->join($targetTable, $joinSql, 'left');
 		DB::setTime(microtime(true), __METHOD__);
@@ -186,7 +186,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	/**
 	 * @param string $targetTable
 	 */
-	public function rightJoin(string $targetTable, $joinSql)
+	public function rightJoin(string $targetTable, $joinSql) // @phpstan-ignore-line
 	{
 		$this->join($targetTable, $joinSql, 'right');
 		DB::setTime(microtime(true), __METHOD__);
@@ -197,7 +197,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	 * @param string $columnName
 	 * @param string $sort
 	 */
-	public function orderBy(string $columnName, string $sort = 'ASC')
+	public function orderBy(string $columnName, string $sort = 'ASC') // @phpstan-ignore-line
 	{
 		$this->orderBy = ' ORDER BY ' . $columnName . ' ' . $sort;
 		DB::setTime(microtime(true), __METHOD__);
@@ -207,14 +207,14 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	/**
 	 * @param string $columnName
 	 */
-	public function groupBy(string $columnName)
+	public function groupBy(string $columnName) // @phpstan-ignore-line
 	{
 		$this->groupBy = ' GROUP BY ' . $columnName;
 		DB::setTime(microtime(true), __METHOD__);
 		return $this;
 	}
 
-	public function limit($start, $limit)
+	public function limit($start, $limit) // @phpstan-ignore-line
 	{
 		$this->limit = ' LIMIT ' . $start . ',' . $limit;
 		DB::setTime(microtime(true), __METHOD__);
@@ -224,14 +224,14 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	/**
 	 * @param string $sqlq
 	 */
-	public function sql(string $sqlq)
+	public function sql(string $sqlq) // @phpstan-ignore-line
 	{
 		$this->sqlq = $sqlq;
 		DB::setTime(microtime(true), __METHOD__);
 		return $this;
 	}
 
-	public function all()
+	public function all() // @phpstan-ignore-line
 	{
 		try {
 			$query = $this->generateQuery();
@@ -244,7 +244,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 		}
 	}
 
-	public function first()
+	public function first() // @phpstan-ignore-line
 	{
 		try {
 			$query = $this->generateQuery();
@@ -257,7 +257,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 		}
 	}
 
-	public function rowCount()
+	public function rowCount() // @phpstan-ignore-line
 	{
 		try {
 			$query = $this->generateQuery();
@@ -271,7 +271,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 		}
 	}
 
-	public function fetchCol()
+	public function fetchCol() // @phpstan-ignore-line
 	{
 		try {
 			$query = $this->generateQuery();
@@ -284,7 +284,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 		}
 	}
 
-	public function generateQuery()
+	public function generateQuery() // @phpstan-ignore-line
 	{
 		if ($this->join) {
 			$this->sql .= implode(' ', $this->join);
@@ -324,7 +324,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	/**
 	 * @param string $conditionType
 	 */
-	private function get_where(string $conditionType = 'where')
+	private function get_where(string $conditionType = 'where') // @phpstan-ignore-line
 	{
 		if ((is_array($this->{$conditionType}) && count($this->{$conditionType}) > 0)) {
 			$whereClause = ' ' . ($conditionType == 'having' ? 'HAVING' : 'WHERE') . ' ';
@@ -411,7 +411,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 			$whereClause = rtrim($whereClause, '||');
 			$whereClause = rtrim($whereClause, '&&');
 			$whereClause = preg_replace('/\(\s+(\|\||&&)/', '(', $whereClause);
-			$whereClause = preg_replace('/(\|\||&&)\s+\)/', ')', $whereClause);
+			$whereClause = preg_replace('/(\|\||&&)\s+\)/', ')', (string) $whereClause);
 			$this->sql .= $whereClause;
 			$this->unionSql .= $whereClause;
 			$this->{$conditionType} = null;
@@ -422,14 +422,14 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	/**
 	 * @param string $tableName
 	 */
-	public function insert(string $tableName)
+	public function insert(string $tableName) // @phpstan-ignore-line
 	{
 		$this->sql = 'INSERT INTO ' . $tableName;
 		DB::setTime(microtime(true), __METHOD__);
 		return $this;
 	}
 
-	public function set($data, $value = null)
+	public function set($data, $value = null) // @phpstan-ignore-line
 	{
 		try {
 			if ($value) {
@@ -470,21 +470,21 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 		}
 	}
 
-	public function lastId()
+	public function lastId() // @phpstan-ignore-line
 	{
 		$result = $this->conn->lastInsertId();
 		DB::setTime(microtime(true), __METHOD__);
 		return $result;
 	}
 
-	public function lastId2($data)
+	public function lastId2($data) // @phpstan-ignore-line
 	{
 		$result = $this->conn->lastInsertId($data);
 		DB::setTime(microtime(true), __METHOD__);
 		return $result;
 	}
 
-	public function lastId3()
+	public function lastId3() // @phpstan-ignore-line
 	{
 		$result = $this->conn->query("SELECT LAST_INSERT_ID()")->fetchColumn();
 		DB::setTime(microtime(true), __METHOD__);
@@ -494,7 +494,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	/**
 	 * @param string $tableName
 	 */
-	public function update(string $tableName)
+	public function update(string $tableName) // @phpstan-ignore-line
 	{
 		$this->sql = 'UPDATE ' . $tableName;
 		DB::setTime(microtime(true), __METHOD__);
@@ -504,14 +504,14 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	/**
 	 * @param string $tableName
 	 */
-	public function delete(string $tableName)
+	public function delete(string $tableName) // @phpstan-ignore-line
 	{
 		$this->sql = 'DELETE FROM ' . $tableName;
 		DB::setTime(microtime(true), __METHOD__);
 		return $this;
 	}
 
-	public function done()
+	public function done() // @phpstan-ignore-line
 	{
 		try {
 			$this->get_where('where');
@@ -525,7 +525,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 		}
 	}
 
-	public function total()
+	public function total() // @phpstan-ignore-line
 	{
 		if ($this->join) {
 			$this->sql .= implode(' ', $this->join);
@@ -551,7 +551,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 		return $result['total'];
 	}
 
-	public function pagination($totalRecord, $paginationLimit, $pageParamName)
+	public function pagination($totalRecord, $paginationLimit, $pageParamName) // @phpstan-ignore-line
 	{
 		$this->paginationLimit = $paginationLimit;
 		$this->page = isset($_GET[$pageParamName]) && is_numeric($_GET[$pageParamName]) ? $_GET[$pageParamName] : 1;
@@ -568,14 +568,14 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	/**
 	 * @param string $class
 	 */
-	public function showPagination($url, string $class = 'active')
+	public function showPagination($url, string $class = 'active') // @phpstan-ignore-line
 	{
 		if ($this->totalRecord > $this->paginationLimit) {
 			for ($i = $this->page - 5; $i < $this->page + 5 + 1; $i++) {
 				if ($i > 0 && $i <= $this->pageCount) {
 					$this->html .= str_replace(
 						['[active]', '[text]', '[url]'],
-						[($i == $this->page ? $class : null), $i, str_replace('[page]', $i, $url)],
+						[($i == $this->page ? $class : null), $i, str_replace('[page]', (string) $i, $url)],
 						$this->paginationItem
 					);
 				}
@@ -585,17 +585,17 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 		}
 	}
 
-	public function nextPage()
+	public function nextPage() // @phpstan-ignore-line
 	{
 		return ($this->page + 1 < $this->pageCount ? $this->page + 1 : $this->pageCount);
 	}
 
-	public function prevPage()
+	public function prevPage() // @phpstan-ignore-line
 	{
 		return ($this->page - 1 > 0 ? $this->page - 1 : 1);
 	}
 
-	public function getSqlString()
+	public function getSqlString() // @phpstan-ignore-line
 	{
 		$this->get_where('where');
 		$this->get_where('having');
@@ -604,48 +604,42 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 		return $result;
 	}
 
-	/**
-	 * @param array $values
-	 */
-	public function between($column, array $values = [])
+	public function between($column, $values) // @phpstan-ignore-line
 	{
 		$this->where($column, $values, 'BETWEEN');
 		DB::setTime(microtime(true), __METHOD__);
 		return $this;
 	}
 
-	/**
-	 * @param array $values
-	 */
-	public function notBetween($column, array $values = [])
+	public function notBetween($column, $values) // @phpstan-ignore-line
 	{
 		$this->where($column, $values, 'NOT BETWEEN');
 		DB::setTime(microtime(true), __METHOD__);
 		return $this;
 	}
 
-	public function findInSet($column, $value)
+	public function findInSet($column, $value) // @phpstan-ignore-line
 	{
 		$this->where($column, $value, 'FIND_IN_SET');
 		DB::setTime(microtime(true), __METHOD__);
 		return $this;
 	}
 
-	public function findInSetReverse($column, $value)
+	public function findInSetReverse($column, $value) // @phpstan-ignore-line
 	{
 		$this->where($column, $value, 'FIND_IN_SET_REVERSE');
 		DB::setTime(microtime(true), __METHOD__);
 		return $this;
 	}
 
-	public function in($column, $value)
+	public function in($column, $value) // @phpstan-ignore-line
 	{
 		$this->where($column, $value, 'IN');
 		DB::setTime(microtime(true), __METHOD__);
 		return $this;
 	}
 
-	public function notIn($column, $value)
+	public function notIn($column, $value) // @phpstan-ignore-line
 	{
 		$this->where($column, $value, 'NOT IN');
 		DB::setTime(microtime(true), __METHOD__);
@@ -655,7 +649,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	/**
 	 * @param string $inner
 	 */
-	public function like($column, $value, string $inner = 'all')
+	public function like($column, $value, string $inner = 'all') // @phpstan-ignore-line
 	{
 		if ($inner == 'all') {
 			$value = "%$value%";
@@ -672,7 +666,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	/**
 	 * @param string $inner
 	 */
-	public function notLike($column, $value, string $inner = 'all')
+	public function notLike($column, $value, string $inner = 'all') // @phpstan-ignore-line
 	{
 		if ($inner == 'all') {
 			$value = "%$value%";
@@ -686,7 +680,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 		return $this;
 	}
 
-	public function soundex($column, $value)
+	public function soundex($column, $value) // @phpstan-ignore-line
 	{
 		$this->where($column, $value, 'SOUNDEX');
 		DB::setTime(microtime(true), __METHOD__);
@@ -696,10 +690,10 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	/**
 	 * @param string $tableName
 	 */
-	public function truncate(string $tableName)
+	public function truncate(string $tableName) // @phpstan-ignore-line
 	{
 		$result = $this->conn->query('TRUNCATE TABLE ' . $tableName);
-		self::$queries[] = $result;
+		$this->queries[] = $result;
 		DB::setTime(microtime(true), __METHOD__);
 		return $result;
 	}
@@ -707,7 +701,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	/**
 	 * @param array $dbs
 	 */
-	public function truncateAll(array $dbs = [])
+	public function truncateAll(array $dbs = []) // @phpstan-ignore-line
 	{
 		$query = $this->from('INFORMATION_SCHEMA.TABLES')
 		->select('CONCAT("TRUNCATE TABLE `", table_schema, "`.`", TABLE_NAME, "`;") as query, TABLE_NAME as tableName')
@@ -726,7 +720,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	 * @param string      $tableName
 	 * @param int|integer $ai
 	 */
-	public function setAutoIncrement(string $tableName, int $ai = 1)
+	public function setAutoIncrement(string $tableName, int $ai = 1) // @phpstan-ignore-line
 	{
 		$result = $this->conn->query("ALTER TABLE `{$tableName}` AUTO_INCREMENT = {$ai}")->fetch();
 		$this->queries[] = $result;
@@ -734,7 +728,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 		return $result;
 	}
 
-	protected function showError($error)
+	protected function showError($error) // @phpstan-ignore-line
 	{
 		if ($error instanceof PDOException) {
 			$this->error = $error->getMessage();
@@ -749,10 +743,10 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 	}
 
 	/**
-	 * @param string $name
-	 * @param array  $args
+	 * @param string $method
+	 * @param mixed $args
 	 */
-	public function __call(string $method, array $args)
+	public function __call(string $method, $args) // @phpstan-ignore-line
 	{
 		$this->showError(($method . ' Method Not Found.'));
 		DB::setTime(microtime(true), __METHOD__);

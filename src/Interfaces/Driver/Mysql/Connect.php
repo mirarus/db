@@ -17,5 +17,5 @@ interface Connect
 {
 
 	public function __construct();
-	public function __debugInfo(): array;
+	public function __debugInfo(): array; // @phpstan-ignore-line
 }

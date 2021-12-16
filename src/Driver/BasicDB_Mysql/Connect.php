@@ -22,9 +22,8 @@ use PDOException;
 class Connect extends _Connect implements IConnect
 {
 
-	protected $conn;
-	protected $error;
-	protected $result;
+	protected $conn; // @phpstan-ignore-line
+	protected $error; // @phpstan-ignore-line
 
 	public function __construct()
 	{
@@ -35,7 +34,7 @@ class Connect extends _Connect implements IConnect
 			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$this->conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 		} catch (PDOException $e) {
-			static::showError($e);
+			$this->error = $e;
 		}
 
 		DB::setTime(microtime(true), __METHOD__);
@@ -44,7 +43,7 @@ class Connect extends _Connect implements IConnect
 	/**
 	 * @return array
 	 */
-	public function __debugInfo(): array
+	public function __debugInfo(): array // @phpstan-ignore-line
 	{
 		return [
 			'_connect' => $this->conn,

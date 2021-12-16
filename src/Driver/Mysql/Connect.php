@@ -22,8 +22,8 @@ use PDOException;
 class Connect implements IConnect
 {
 
-	protected $conn;
-	protected $error;
+	protected $conn; // @phpstan-ignore-line
+	protected $error; // @phpstan-ignore-line
 
 	public function __construct()
 	{
@@ -43,7 +43,7 @@ class Connect implements IConnect
 	/**
 	 * @return array
 	 */
-	public function __debugInfo(): array
+	public function __debugInfo(): array // @phpstan-ignore-line
 	{
 		return [
 			'_connect' => $this->conn,

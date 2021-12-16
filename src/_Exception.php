@@ -18,7 +18,14 @@ use Exception;
 class _Exception extends Exception
 {
 
+	/**
+	 * @var string
+	 */
 	protected $class;
+
+	/**
+	 * @var string
+	 */
 	protected $message;
 
 	/**

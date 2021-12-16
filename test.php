@@ -57,6 +57,7 @@ $db = new DB($connect);
  * Connection Mini Usage
  */
 
+// @phpstan-ignore-next-line
 $db = new DB('mysql', 'mysql:host=localhost;dbname=testdb;charset=utf8', 'root', 'mysql');
 
 
@@ -76,6 +77,7 @@ $result = $db
 ], ['_id' => 14]);
 */
 
+// @phpstan-ignore-next-line
 $result = $db->from('users')->all();
 
 
@@ -87,6 +89,8 @@ $result = $db->from('users')->all();
   'surname' => 'Güçlüxxddds'
 ]);
 */
+
+// @phpstan-ignore-next-line
 $result = $db->from('users')->all();
 
 

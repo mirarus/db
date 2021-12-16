@@ -8,7 +8,7 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.6
+ * @version 0.4
  */
 
 namespace Mirarus\DB;
@@ -31,13 +31,13 @@ class DB implements IDB
 	 * Driver Time
 	 * @var array
 	 */
-	private static $_time = [];
+	private static $_time = []; // @phpstan-ignore-line
 
 	/**
 	 * Connection Link
 	 * @var array
 	 */
-	protected static $connect = [];
+	protected static $connect = []; // @phpstan-ignore-line
 
 	/**
 	 * Selected Driver Namespace Name
@@ -53,14 +53,15 @@ class DB implements IDB
 
 	/**
 	 * Selected Driver Class
-	 * @var class
+	 * @var object
 	 */
-	public static $db;
+	private static $db;
 
 	/**
-	 * @param IConnect $connector
+	 * @param IConnect    $connector
+	 * @param object|null &$return
 	 */
-	public function __construct(IConnect $connector)
+	public function __construct(IConnect $connector, object &$return = null)
 	{
 		self::$time				= microtime(true);
 		self::$connect		= $connector->get();
@@ -73,13 +74,8 @@ class DB implements IDB
 		self::setGlobal(('_DB__' . @mb_strtolower(self::$connect['driver'], "UTF-8")), self::$db);
 
 		self::setTime(microtime(true), __METHOD__);
-
-		return self::$db;
-	}
-
-	public static function DB()
-	{
-		return self::$db;
+		// @phpstan-ignore-next-line
+		return $return = self::$db;
 	}
 
 	/**
@@ -96,7 +92,7 @@ class DB implements IDB
 	 * @param string|null $func
 	 * @param string|null $ns
 	 */
-	public static function getTime(string $func = null, string $ns = null)
+	public static function getTime(string $func = null, string $ns = null) // @phpstan-ignore-line
 	{
 		if ($ns) {
 			foreach (self::$_time as $key => $val) {
@@ -121,9 +117,9 @@ class DB implements IDB
 	 * @param string $method
 	 * @param array  $args
 	 */
-	public function __call(string $method, array $args = [])
+	public function __call(string $method, array $args = []) // @phpstan-ignore-line
 	{
-		$function = call_user_func_array([self::$db, $method], $args);
+		$function = call_user_func_array([self::$db, $method], $args); // @phpstan-ignore-line
 		self::setTime(microtime(true), __METHOD__);
 		return $function;
 	}
@@ -132,9 +128,9 @@ class DB implements IDB
 	 * @param string $method
 	 * @param array  $args
 	 */
-	public static function __callStatic(string $method, array $args = [])
+	public static function __callStatic(string $method, array $args = []) // @phpstan-ignore-line
 	{
-		$function = call_user_func_array([self::$db, $method], $args);
+		$function = call_user_func_array([self::$db, $method], $args); // @phpstan-ignore-line
 		self::setTime(microtime(true), __METHOD__);
 		return $function;
 	}
@@ -142,7 +138,7 @@ class DB implements IDB
 	/**
 	 * @return array
 	 */
-	public function __debugInfo(): array
+	public function __debugInfo(): array // @phpstan-ignore-line
 	{
 		return [
 			'_driver' => self::$connect['driver'],
