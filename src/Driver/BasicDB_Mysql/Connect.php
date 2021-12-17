@@ -34,7 +34,7 @@ class Connect extends _Connect implements IConnect
 			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$this->conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 		} catch (PDOException $e) {
-			$this->error = $e;
+			static::showError($e); // @phpstan-ignore-line
 		}
 
 		DB::setTime(microtime(true), __METHOD__);
@@ -42,8 +42,10 @@ class Connect extends _Connect implements IConnect
 
 	/**
 	 * @return array
+	 *
+	 * @phpstan-ignore-next-line
 	 */
-	public function __debugInfo(): array // @phpstan-ignore-line
+	public function __debugInfo(): array
 	{
 		return [
 			'_connect' => $this->conn,
