@@ -15,7 +15,7 @@ namespace Mirarus\DB\Interfaces\Driver\BasicDB_Mysql;
 
 use Closure;
 
-interface BasicDB_Mysql
+interface Driver
 {
 
   public function from(string $tableName); // @phpstan-ignore-line

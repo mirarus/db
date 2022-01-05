@@ -14,13 +14,12 @@
 namespace Mirarus\DB\Driver\Mysql;
 
 use Mirarus\DB\DB;
-use Mirarus\DB\Driver;
-use Mirarus\DB\_Exception;
-use Mirarus\DB\Interfaces\Driver\Mysql\Mysql as IMysql;
+use Mirarus\DB\Exception;
+use Mirarus\DB\Interfaces\Driver\Mysql\Driver as IDriver;
 use PDO;
 use PDOException;
 
-class Mysql extends Connect implements IMysql
+class Driver extends Connect implements IDriver
 {
 
 	private static
@@ -310,9 +309,9 @@ class Mysql extends Connect implements IMysql
 	 * @param  PDOException $error
 	 * @return _Exception
 	 */
-	private function showError(PDOException $error): _Exception
+	private function showError(PDOException $error): Exception
 	{
 		$this->error = $error->getMessage();
-		throw new _Exception(Driver::getText(), $error->getMessage());
+		throw new Exception(self::get('driver'), $error->getMessage());
 	}
 }

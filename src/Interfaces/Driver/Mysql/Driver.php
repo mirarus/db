@@ -13,7 +13,7 @@
 
 namespace Mirarus\DB\Interfaces\Driver\Mysql;
 
-interface Mysql
+interface Driver
 {
 
   public function from(string $tableName); // @phpstan-ignore-line

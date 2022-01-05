@@ -22,6 +22,11 @@ class DB implements IDB
 {
 
 	/**
+	 * @var boolean
+	 */
+	private static $active = false;
+	
+	/**
 	 * Class Time
 	 * @var float
 	 */
@@ -63,10 +68,12 @@ class DB implements IDB
 	 */
 	public function __construct(IConnect $connector, object &$return = null)
 	{
+		if (self::$active == true) return;
+
 		self::$time				= microtime(true);
 		self::$connect		= $connector->get();
 		self::$dNamespace = (__NAMESPACE__ . '\\Driver\\' . self::$connect['driver']);
-		self::$dClass			= (self::$dNamespace . '\\' . self::$connect['driver']);
+		self::$dClass			= (self::$dNamespace . '\\Driver');
 		self::$db					= new self::$dClass();
 
 		self::setGlobal('_DB', self::$db);
@@ -74,8 +81,13 @@ class DB implements IDB
 		self::setGlobal(('_DB__' . @mb_strtolower(self::$connect['driver'], "UTF-8")), self::$db);
 
 		self::setTime(microtime(true), __METHOD__);
+		
 		// @phpstan-ignore-next-line
-		return $return = self::$db;
+		$return = self::$db;
+
+		self::$active = true;
+
+		return $return;
 	}
 
 	/**

@@ -1,27 +1,26 @@
 <?php
 
 /**
- * BasicDB_Mysql
+ * Driver
  *
  * Mirarus Database Libs
  * @package Mirarus\DB\Driver\BasicDB_Mysql
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.3
+ * @version 0.4
  */
 
 namespace Mirarus\DB\Driver\BasicDB_Mysql;
 
 use Mirarus\DB\DB;
-use Mirarus\DB\Driver;
-use Mirarus\DB\_Exception;
-use Mirarus\DB\Interfaces\Driver\BasicDB_Mysql\BasicDB_Mysql as IBasicDB_Mysql;
+use Mirarus\DB\Exception;
+use Mirarus\DB\Interfaces\Driver\BasicDB_Mysql\Driver as IDriver;
 use PDO;
 use PDOException;
 use Closure;
 
-class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
+class Driver extends Connect implements IDriver
 {
 
 	private
@@ -739,7 +738,7 @@ class BasicDB_Mysql extends Connect implements IBasicDB_Mysql
 		if (!$this->error) return;
 
 		DB::setTime(microtime(true), __METHOD__);
-		throw new _Exception(Driver::getText(), $this->error);
+		throw new Exception(self::get('driver'), $this->error);
 	}
 
 	/**

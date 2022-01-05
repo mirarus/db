@@ -1,7 +1,7 @@
 <?php
 
 /**
- * _Exception
+ * Exception
  *
  * Mirarus Database Libs
  * @package Mirarus\DB
@@ -13,9 +13,7 @@
 
 namespace Mirarus\DB;
 
-use Exception;
-
-class _Exception extends Exception
+class Exception extends \Exception
 {
 
 	/**

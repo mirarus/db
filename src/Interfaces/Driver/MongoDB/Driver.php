@@ -13,7 +13,7 @@
 
 namespace Mirarus\DB\Interfaces\Driver\MongoDB;
 
-interface MongoDB
+interface Driver
 {
 
 	public function from(string $tableName); // @phpstan-ignore-line
