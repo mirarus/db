@@ -8,7 +8,7 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.4
+ * @version 0.5
  */
 
 namespace Mirarus\DB\Driver\Mysql;
@@ -50,7 +50,7 @@ class Driver extends Connect implements IDriver
 	{
 		$this->sql = 'SELECT * FROM ' . $tableName;
 		$this->tableName = $tableName;
-		DB::setTime(microtime(true), __METHOD__);
+		DB::setTime(microtime(true), __METHOD__, __NAMESPACE__);
 		return $this;
 	}
 
@@ -61,7 +61,7 @@ class Driver extends Connect implements IDriver
 	{
 		$this->sql = 'SELECT COUNT(*) FROM ' . $tableName;
 		$this->tableName = $tableName;
-		DB::setTime(microtime(true), __METHOD__);
+		DB::setTime(microtime(true), __METHOD__, __NAMESPACE__);
 		return $this;
 	}
 
@@ -71,7 +71,7 @@ class Driver extends Connect implements IDriver
 	public function select(string $columns) // @phpstan-ignore-line
 	{
 		$this->sql = str_replace(' * ', ' ' . $columns . ' ', $this->sql);
-		DB::setTime(microtime(true), __METHOD__);
+		DB::setTime(microtime(true), __METHOD__, __NAMESPACE__);
 		return $this;
 	}
 
@@ -91,7 +91,7 @@ class Driver extends Connect implements IDriver
 			'grouped' => $this->grouped,
 			'group_id' => $this->group_id
 		];
-		DB::setTime(microtime(true), __METHOD__);
+		DB::setTime(microtime(true), __METHOD__, __NAMESPACE__);
 		return $this;
 	}
 
@@ -101,7 +101,7 @@ class Driver extends Connect implements IDriver
 	public function insert(string $tableName) // @phpstan-ignore-line
 	{
 		$this->sql = 'INSERT INTO ' . $tableName;
-		DB::setTime(microtime(true), __METHOD__);
+		DB::setTime(microtime(true), __METHOD__, __NAMESPACE__);
 		return $this;
 	}
 
@@ -111,7 +111,7 @@ class Driver extends Connect implements IDriver
 	public function update(string $tableName) // @phpstan-ignore-line
 	{
 		$this->sql = 'UPDATE ' . $tableName;
-		DB::setTime(microtime(true), __METHOD__);
+		DB::setTime(microtime(true), __METHOD__, __NAMESPACE__);
 		return $this;
 	}
 
@@ -121,7 +121,7 @@ class Driver extends Connect implements IDriver
 	public function delete(string $tableName) // @phpstan-ignore-line
 	{
 		$this->sql = 'DELETE FROM ' . $tableName;
-		DB::setTime(microtime(true), __METHOD__);
+		DB::setTime(microtime(true), __METHOD__, __NAMESPACE__);
 		return $this;
 	}
 
@@ -153,7 +153,7 @@ class Driver extends Connect implements IDriver
 
 			$result = $this->conn->prepare($this->sql)->execute($executeValue);
 
-			DB::setTime(microtime(true), __METHOD__);
+			DB::setTime(microtime(true), __METHOD__, __NAMESPACE__);
 
 			if (strstr($this->sql, 'INSERT INTO ')) {
 				return $this->conn->lastInsertId();
@@ -171,7 +171,7 @@ class Driver extends Connect implements IDriver
 			$this->getWhere('where');
 			$this->getWhere('having');
 			$result = $this->conn->exec($this->sql);
-			DB::setTime(microtime(true), __METHOD__);
+			DB::setTime(microtime(true), __METHOD__, __NAMESPACE__);
 			return $result;
 		} catch (PDOException $e) {
 			$this->showError($e);
@@ -182,7 +182,7 @@ class Driver extends Connect implements IDriver
 	{
 		try {
 			$result = $this->genQuery()->fetchAll(PDO::FETCH_ASSOC);
-			DB::setTime(microtime(true), __METHOD__);
+			DB::setTime(microtime(true), __METHOD__, __NAMESPACE__);
 			return $result;
 		} catch (PDOException $e) {
 			$this->showError($e);
@@ -193,7 +193,7 @@ class Driver extends Connect implements IDriver
 	{
 		try {
 			$result = $this->genQuery()->fetch(PDO::FETCH_ASSOC);
-			DB::setTime(microtime(true), __METHOD__);
+			DB::setTime(microtime(true), __METHOD__, __NAMESPACE__);
 			return $result;
 		} catch (PDOException $e) {
 			$this->showError($e);
@@ -227,7 +227,7 @@ class Driver extends Connect implements IDriver
 			$this->type = '';
 			$query = $this->conn->query($this->sql);
 
-			DB::setTime(microtime(true), __METHOD__);
+			DB::setTime(microtime(true), __METHOD__, __NAMESPACE__);
 
 			return $query;
 		} catch (PDOException $e) {
@@ -301,7 +301,7 @@ class Driver extends Connect implements IDriver
 			$this->sql .= $whereClause;
 			$this->unionSql .= $whereClause;
 			$this->{$conditionType} = null;
-			DB::setTime(microtime(true), __METHOD__);
+			DB::setTime(microtime(true), __METHOD__, __NAMESPACE__);
 		}
 	}
 

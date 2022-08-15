@@ -8,7 +8,7 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.0
+ * @version 0.1
  */
 
 namespace Mirarus\DB\Driver\Mysql;
@@ -37,7 +37,7 @@ class Connect implements IConnect
 			$this->error = $e;
 		}
 
-		DB::setTime(microtime(true), __METHOD__);
+		DB::setTime(microtime(true), __METHOD__, __NAMESPACE__);
 	}
 
 	/**

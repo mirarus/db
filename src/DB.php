@@ -8,7 +8,7 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.4
+ * @version 0.5
  */
 
 namespace Mirarus\DB;
@@ -25,7 +25,7 @@ class DB implements IDB
 	 * @var boolean
 	 */
 	private static $active = false;
-	
+
 	/**
 	 * Class Time
 	 * @var float
@@ -47,7 +47,7 @@ class DB implements IDB
 	/**
 	 * Selected Driver Namespace Name
 	 * @var string
-	 */	
+	 */
 	private static $dNamespace;
 
 	/**
@@ -81,7 +81,7 @@ class DB implements IDB
 		self::setGlobal(('_DB__' . @mb_strtolower(self::$connect['driver'], "UTF-8")), self::$db);
 
 		self::setTime(microtime(true), __METHOD__);
-		
+
 		// @phpstan-ignore-next-line
 		$return = self::$db;
 
@@ -91,14 +91,21 @@ class DB implements IDB
 	}
 
 	/**
-	 * @param float  $time
-	 * @param string $func
+	 * @param float       $time
+	 * @param string      $method
+	 * @param string|null $namespace
 	 */
-	public static function setTime(float $time, string $func): void
-	{
-		# $func = str_replace((__NAMESPACE__ . '\\'), null, $func);
-		self::$_time[$func] = ($time - self::$time);
-	}
+  public static function setTime(float $time, string $method, string $namespace = null): void
+  {
+    if ($namespace) {
+      $ns = str_replace((__NAMESPACE__ . '\\'), null, $namespace);
+      $m = str_replace(($namespace . '\\'), null, $method);
+      self::$_time[__NAMESPACE__][$ns][$m] = ($time - self::$time);
+    } else {
+      $method = str_replace((__NAMESPACE__ . '\\'), null, $method);
+      self::$_time[__NAMESPACE__][$method] = ($time - self::$time);
+    }
+  }
 
 	/**
 	 * @param string|null $func
@@ -119,7 +126,7 @@ class DB implements IDB
 	/**
 	 * @param string $key
 	 * @param mixed	 $val
-	 */	
+	 */
 	private static function setGlobal(string $key, $val): void
 	{
 		@$GLOBALS[$key] = $val;

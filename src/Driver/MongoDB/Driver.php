@@ -8,7 +8,7 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.3
+ * @version 0.4
  */
 
 namespace Mirarus\DB\Driver\MongoDB;
@@ -44,9 +44,9 @@ class Driver extends Connect implements IDriver
 		$query = new Query([]);
 		$result = $this->conn->executeQuery($this->dbName . '.' . $this->tableName, $query)->toArray();
 
-		DB::setTime(microtime(true), __METHOD__);
+		DB::setTime(microtime(true), __METHOD__, __NAMESPACE__);
 
-		$result['_time'] = DB::getTime(__METHOD__);
+		$result['_time'] = DB::getTime(__METHOD__, __NAMESPACE__);
 
 		return $result;
 	}
@@ -62,7 +62,7 @@ class Driver extends Connect implements IDriver
 
 		$result = (bool) $this->conn->executeBulkWrite($this->dbName . '.' . $this->tableName, $writter);
 
-		DB::setTime(microtime(true), __METHOD__);
+		DB::setTime(microtime(true), __METHOD__, __NAMESPACE__);
 
 		return $result;
 	}
@@ -79,7 +79,7 @@ class Driver extends Connect implements IDriver
 
 		$result = (bool) $this->conn->executeBulkWrite($this->dbName . '.' . $this->tableName, $writter);
 
-		DB::setTime(microtime(true), __METHOD__);
+		DB::setTime(microtime(true), __METHOD__, __NAMESPACE__);
 
 		return $result;
 	}
