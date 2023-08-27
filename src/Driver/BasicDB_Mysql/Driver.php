@@ -47,6 +47,11 @@ class Driver extends Connect implements IDriver
   public $paginationItem = '<li class="[active]"><a href="[url]">[text]</a></li>'; // @phpstan-ignore-line
   public $reference = ['NOW()']; // @phpstan-ignore-line
 
+	public function conn()
+	{
+		return $this->conn;
+	}
+
   /**
    * @param string $tableName
    */
