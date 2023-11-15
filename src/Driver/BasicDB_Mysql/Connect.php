@@ -8,7 +8,7 @@
  * @author  Ali Güçlü (Mirarus) <aliguclutr@gmail.com>
  * @link https://github.com/mirarus/db
  * @license http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version 0.3
+ * @version 0.3.1
  */
 
 namespace Mirarus\DB\Driver\BasicDB_Mysql;
@@ -30,7 +30,7 @@ class Connect extends _Connect implements IConnect
 		try {
 			$this->conn = new PDO(...self::get('dsn'));
 			$this->conn->query('SET CHARACTER SET utf8');
-			$this->conn->query('SET NAMES utf8 utf8');
+			$this->conn->query('SET NAMES utf8');
 			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$this->conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 		} catch (PDOException $e) {
